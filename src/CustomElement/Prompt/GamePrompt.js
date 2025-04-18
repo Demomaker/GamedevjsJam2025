@@ -237,7 +237,7 @@ export class GamePrompt {
 
     show(title, message, defaultValue = '', confirmCallback = null, cancelCallback = null) {
         if (this.isActive) return;
-accountValue
+
         this.isActive = true;
         this.inputValue = defaultValue.toString();
         this.confirmCallback = confirmCallback;

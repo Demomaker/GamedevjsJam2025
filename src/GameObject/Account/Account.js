@@ -1,6 +1,9 @@
+import { AccountComponent } from '../../CustomElement/AccountComponent/AccountComponent.js';
+
 export class Account {
-    constructor(accountComponent) {
-        this.accountComponent = accountComponent;
+    constructor(accountName) {
+        this.accountName = accountName;
+        this.accountComponent = new AccountComponent(accountName);
         this.balance = 0;
     }
 
@@ -32,6 +35,6 @@ export class Account {
     }
 
     getName() {
-        return this.accountComponent.getLabel();
+        return this.accountName;
     }
 }

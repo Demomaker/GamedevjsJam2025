@@ -164,7 +164,6 @@ export class AccountComponent {
     }
 
     update(accountValue) {
-        this.accountValue = accountValue;
         this.accountValueText.text = accountValue.toString();
         return this;
     }
@@ -192,9 +191,5 @@ export class AccountComponent {
         }
 
         return this;
-    }
-
-    getLabel() {
-        return this.label;
     }
 };

@@ -2,15 +2,15 @@ import { Account } from './Account.js';
 import { GamePrompt } from '../../CustomElement/Prompt/GamePrompt.js';
 
 export class OperationableAccount extends Account {
-    constructor(accountComponent) { super(accountComponent); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
+    constructor(accountName) { super(accountName); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
     init(scene, posX, posY, balance) {
         const parent = super.init(scene, posX, posY, balance);
         const self = this;
         this.gamePrompt = new GamePrompt(scene).init();
 
-        self.accountComponent = self.accountComponent
+        parent.accountComponent = parent.accountComponent
         .addDeposit(async () => {
-            const amount = await self.accountComponent.deposit();
+            const amount = await parent.accountComponent.deposit();
             for (const { condition, failMessage } of self.depositConditions) {
                 if(!condition(amount)) {
                     this.gamePrompt.showAlert(`${self.getName()} Deposit`, failMessage);
@@ -24,7 +24,7 @@ export class OperationableAccount extends Account {
 
         })
         .addWithdraw(async () => {
-            const amount = await self.accountComponent.withdraw();
+            const amount = await parent.accountComponent.withdraw();
             for (const {condition, failMessage} of self.withdrawConditions) {
                 if(!condition(amount)) {
                     this.gamePrompt.showAlert(`${self.getName()} Withdraw`, failMessage);
@@ -75,5 +75,18 @@ export class OperationableAccount extends Account {
     addWithdrawCallback(callback) {
         this.withdrawCallbacks.push(callback);
         return this;
+    }
+
+    dependsOn(otherAccount) {
+        return this.addDepositCallback((amount) => {
+            otherAccount.decrementBalanceBy(amount);
+        })
+        .addWithdrawCallback((amount) => {
+            otherAccount.incrementBalanceBy(amount);
+        })
+        .addDepositCondition((amount) => {
+            return otherAccount.canWithdraw(amount);
+        }, `${otherAccount.getName()} funds are insufficient!`);
+
     }
 }
