@@ -2,7 +2,7 @@ import { Account } from './Account.js';
 import { GamePrompt } from '../../CustomElement/Prompt/GamePrompt.js';
 
 export class OperationableAccount extends Account {
-    constructor(accountName) { super(accountName); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
+    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false) { super(accountName, interest, intervalInMilliseconds, lockWhileInteresting); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
     init(scene, posX, posY, balance) {
         const parent = super.init(scene, posX, posY, balance);
         const self = this;
@@ -11,6 +11,11 @@ export class OperationableAccount extends Account {
         parent.accountComponent = parent.accountComponent
         .addDeposit(async () => {
             const amount = await parent.accountComponent.deposit();
+            if(parent.isLocked()) {
+                this.gamePrompt.hide();
+                this.gamePrompt.showAlert(`${self.getName()} Deposit`, 'You cannot deposit \nduring the term period.\nWait until the end of \nthis period before doing so.');
+                return;
+            }
             for (const { condition, failMessage } of self.depositConditions) {
                 if(!condition(amount)) {
                     this.gamePrompt.showAlert(`${self.getName()} Deposit`, failMessage);
@@ -25,6 +30,11 @@ export class OperationableAccount extends Account {
         })
         .addWithdraw(async () => {
             const amount = await parent.accountComponent.withdraw();
+            if(parent.isLocked()) {
+                this.gamePrompt.hide();
+                this.gamePrompt.showAlert(`${self.getName()} Withdraw`, 'You cannot withdraw \nduring the term period.\nWait until the end of \nthis period before doing so.')
+                return;
+            }
             for (const {condition, failMessage} of self.withdrawConditions) {
                 if(!condition(amount)) {
                     this.gamePrompt.showAlert(`${self.getName()} Withdraw`, failMessage);

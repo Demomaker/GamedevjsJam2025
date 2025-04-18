@@ -173,6 +173,7 @@ export class GamePrompt {
         this.originalKeyboardInput = this.scene.input.keyboard.enabled;
 
         this.scene.input.keyboard.enabled = true;
+        this.scene.input.
 
         const keyboard = this.scene.input.keyboard.addKeys({
             'BACKSPACE': Phaser.Input.Keyboard.KeyCodes.BACKSPACE,
