@@ -3,6 +3,7 @@ import { AddTitleText, AddNormalText } from '../../GameProperties/Utils.js';
 import { Account } from '../../GameObject/Account/Account.js';
 import { OperationableAccount } from '../../GameObject/Account/OperationableAccount.js';
 import { ButtonComponent } from '../../CustomElement/ButtonComponent/ButtonComponent.js';
+import { KeyEventSubscription } from '../../CustomElement/KeyEvent/KeyEventSubscription.js';
 
 const TIME_BETWEEN_COMPONENT_UPDATES_IN_MILLISECONDS = 100;
 
@@ -40,6 +41,12 @@ export class GameScene extends Phaser.Scene {
         )
         .addCallback(() => {
             this.checkingAccount.incrementBalanceBy(1);
+        });
+
+        this.input.keyboard.on('keydown', (event) => {
+            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC && !KeyEventSubscription.isKeyboardReserved()) {
+                this.scene.start('MainMenuScene');
+            }
         });
     }
 

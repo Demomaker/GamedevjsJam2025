@@ -1,4 +1,4 @@
-import { ForegroundColor, toPhaserColor } from '../../GameProperties/Colors.js';
+import { BorderColor, toPhaserColor } from '../../GameProperties/Colors.js';
 
 export class RectangleContainer {
     constructor() { this.rectangleContainer = null; }
@@ -7,7 +7,7 @@ export class RectangleContainer {
         const containerStrokeWidth = 2;
 
         this.rectangleContainer = scene.add.rectangle(posX + containerStrokeWidth / 2, posY + containerStrokeWidth / 2, width, height)
-        .setStrokeStyle(containerStrokeWidth, toPhaserColor(ForegroundColor), 0.3)
+        .setStrokeStyle(containerStrokeWidth, toPhaserColor(BorderColor), 0.3)
         .setOrigin(0.5, 0.9);
 
         return this;

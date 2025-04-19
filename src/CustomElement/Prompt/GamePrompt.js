@@ -1,6 +1,7 @@
 import { AddNormalText } from '../../GameProperties/Utils.js';
-import { ForegroundColor, toPhaserColor } from '../../GameProperties/Colors.js';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent.js';
+import { KeyEventSubscription } from '../../CustomElement/KeyEvent/KeyEventSubscription.js';
+import { BorderColor, toPhaserColor } from '../../GameProperties/Colors.js';
 
 export class GamePrompt {
     constructor(scene) {
@@ -25,6 +26,7 @@ export class GamePrompt {
     init() {
         const { width, height } = this.scene.scale;
 
+        this.setupKeyboardEventListening();
         this.overlay = this.scene.add.rectangle(
             width / 2,
             height / 2,
@@ -47,7 +49,7 @@ export class GamePrompt {
             0xdddddd,
             1
         );
-        this.background.setStrokeStyle(2, 0xffffff);
+        this.background.setStrokeStyle(2, toPhaserColor(BorderColor));
         this.background.setDepth(1001);
         this.background.setVisible(false);
 
@@ -138,33 +140,14 @@ export class GamePrompt {
     }
 
     setupKeyboardInput() {
-        this.originalKeyboardInput = this.scene.input.keyboard.enabled;
+        this.handleInputReservation(true);
+    }
 
-        this.scene.input.keyboard.enabled = true;
+    restoreKeyboardInput() {
+        this.handleInputReservation(false);
+    }
 
-        const keyboard = this.scene.input.keyboard.addKeys({
-            'BACKSPACE': Phaser.Input.Keyboard.KeyCodes.BACKSPACE,
-            'ENTER': Phaser.Input.Keyboard.KeyCodes.ENTER,
-            'ESC': Phaser.Input.Keyboard.KeyCodes.ESC,
-            'SPACE': Phaser.Input.Keyboard.KeyCodes.SPACE,
-            'ZERO': Phaser.Input.Keyboard.KeyCodes.ZERO,
-            'ONE': Phaser.Input.Keyboard.KeyCodes.ONE,
-            'TWO': Phaser.Input.Keyboard.KeyCodes.TWO,
-            'THREE': Phaser.Input.Keyboard.KeyCodes.THREE,
-            'FOUR': Phaser.Input.Keyboard.KeyCodes.FOUR,
-            'FIVE': Phaser.Input.Keyboard.KeyCodes.FIVE,
-            'SIX': Phaser.Input.Keyboard.KeyCodes.SIX,
-            'SEVEN': Phaser.Input.Keyboard.KeyCodes.SEVEN,
-            'EIGHT': Phaser.Input.Keyboard.KeyCodes.EIGHT,
-            'NINE': Phaser.Input.Keyboard.KeyCodes.NINE,
-            'PERIOD': Phaser.Input.Keyboard.KeyCodes.PERIOD
-        });
-
-        const numberKeys = [
-            'ZERO', 'ONE', 'TWO', 'THREE', 'FOUR',
-            'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE'
-        ];
-
+    setupKeyboardEventListening() {
         this.scene.input.keyboard.on('keydown', (event) => {
             if (!this.isActive) return;
 
@@ -199,11 +182,12 @@ export class GamePrompt {
         });
     }
 
-    restoreKeyboardInput() {
-        this.scene.input.keyboard.removeAllListeners('keydown');
-
-        if (this.originalKeyboardInput !== null) {
-            this.scene.input.keyboard.enabled = this.originalKeyboardInput;
+    handleInputReservation(shouldReserve) {
+        if(shouldReserve) {
+            KeyEventSubscription.reserveKeyboard();
+        }
+        else if(!shouldReserve) {
+            KeyEventSubscription.freeKeyboard();
         }
     }
 
@@ -277,6 +261,7 @@ export class GamePrompt {
 
     hide() {
         this.isActive = false;
+        this.handleInputReservation(false);
 
         this.container.setVisible(false);
         this.overlay.setVisible(false);
@@ -307,6 +292,7 @@ export class GamePrompt {
         if (this.isActive) return;
 
         this.isActive = true;
+        this.handleInputReservation(true);
 
         this.titleText.setText(title);
         this.messageText.setText(message);

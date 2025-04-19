@@ -6,7 +6,7 @@ export class ButtonComponent {
         this.buttonGroup = null;
     }
 
-    init(scene, x, y, width, height, text, color = 0x4CAF50 /*Green*/) {
+    init(scene, x, y, width, height, text, color = 0x4CAF50 /*Green*/, textCreatorFunction = AddNormalText) {
         this.buttonGroup = this.createButton(
             scene,
             x,
@@ -14,7 +14,8 @@ export class ButtonComponent {
             width,
             height,
             text,
-            color
+            color,
+            textCreatorFunction
         );
 
         this.getButton().on('pointerdown', () => {
@@ -65,7 +66,7 @@ export class ButtonComponent {
         this.getButton().input.enabled = true;
     }
 
-    createButton(scene, x, y, width, height, text, color) {
+    createButton(scene, x, y, width, height, text, color, textCreatorFunction = AddNormalText) {
         const button = scene.add.rectangle(
             x,
             y,
@@ -74,7 +75,7 @@ export class ButtonComponent {
             color
         ).setInteractive({ useHandCursor: true });
 
-        const buttonText = AddNormalText(
+        const buttonText = textCreatorFunction(
             scene,
             x,
             y,

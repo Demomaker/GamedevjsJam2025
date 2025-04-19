@@ -138,7 +138,7 @@ export class AccountComponent {
     }
 
     async promptForAmount(action) {
-        const amount = await this.gamePrompt.show(action, `Enter amount to ${action.toLowerCase()}:`, "0");
+        const amount = await this.gamePrompt.show(action, `Enter amount to ${action.toLowerCase()}:`, "");
         return amount ? parseFloat(amount) : 0;
     }
 
