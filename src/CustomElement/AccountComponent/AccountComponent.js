@@ -1,6 +1,7 @@
 import { AddNormalText } from '../../GameProperties/Utils.js';
 import { RectangleContainer } from '../RectangleContainer/RectangleContainer.js';
 import { GamePrompt } from '../Prompt/GamePrompt.js';
+import { ButtonComponent } from '../ButtonComponent/ButtonComponent.js';
 
 export class AccountComponent {
     constructor(label, interest, intervalInMilliseconds, lockWhileInteresting) {
@@ -32,28 +33,12 @@ export class AccountComponent {
         this.posY = posY;
         this.gamePrompt = gamePrompt || new GamePrompt(scene).init();
 
-        this.labelText = AddNormalText(scene, 0, 0, this.label)
-            .setPadding(10)
-            .setOrigin(0.5, 0.5);
+        this.createSubComponents(scene, posX, posY, initialAccountValue);
+        return this;
+    }
 
-        this.interestText = AddNormalText(scene, 0, this.labelText.height + 10, `Interest : ${(this.interest * 100).toFixed(2)}% per ${(this.intervalInMilliseconds / 1000).toFixed(0)} seconds`)
-            .setPadding(10)
-            .setOrigin(0.5, 0)
-
-        let accountValueTextYPos = this.interestText.height + 10;
-        let accountValueTextOrigin = [0.5, -0.5];
-
-        if(this.lockWhileInteresting) {
-            this.termPeriodText = AddNormalText(scene, 0, this.interestText.height + 10, `0 / ${(this.intervalInMilliseconds / 1000).toFixed(0)} of the term period`)
-            .setPadding(10)
-            .setOrigin(0.5, -0.5);
-            accountValueTextYPos = this.termPeriodText.height + 10;
-            accountValueTextOrigin = [0.5, -1.0]
-        }
-
-        this.accountValueText = AddNormalText(scene, 0, accountValueTextYPos, initialAccountValue.toString())
-            .setPadding(10)
-            .setOrigin(accountValueTextOrigin[0], accountValueTextOrigin[1]);
+    createSubComponents(scene, posX, posY, initialAccountValue) {
+        this.createTextObjects(scene, posX, posY, initialAccountValue);
 
         const buttonY = this.accountValueText.y + this.accountValueText.height + 15;
         const buttonSpacing = 10;
@@ -95,13 +80,8 @@ export class AccountComponent {
             containerHeight
         );
 
-        this.componentGroup = scene.add.group();
-        this.componentGroup.add(this.labelText);
-        this.componentGroup.add(this.interestText);
-        if(this.lockWhileInteresting) {
-            this.componentGroup.add(this.termPeriodText);
-        }
-        this.componentGroup.add(this.accountValueText);
+        this.createComponentGroup(scene);
+
         this.containerHeightWithButtons = (buttonY + buttonHeight + 20) * 1.5;
 
         Phaser.Actions.SetXY(this.componentGroup.getChildren(), this.posX - containerWidth/2, this.posY - containerHeight/2);
@@ -112,44 +92,49 @@ export class AccountComponent {
             this.termPeriodText.x = this.posX;
         }
         this.accountValueText.x = this.posX;
-        this.depositButton.x = this.posX - buttonWidth/2 - buttonSpacing/2;
-        this.withdrawButton.x = this.posX + buttonWidth/2 + buttonSpacing/2;
+        this.depositButton.setX(this.posX - buttonWidth/2 - buttonSpacing/2);
+        this.withdrawButton.setX(this.posX + buttonWidth/2 + buttonSpacing/2);
 
         return this;
     }
 
+    createTextObjects(scene, posX, posY, initialAccountValue) {
+        this.labelText = AddNormalText(scene, 0, 0, this.label)
+            .setPadding(10)
+            .setOrigin(0.5, 0.5);
+
+        this.interestText = AddNormalText(scene, 0, this.labelText.height + 10, `Interest : ${(this.interest * 100).toFixed(2)}% per ${(this.intervalInMilliseconds / 1000).toFixed(0)} seconds`)
+            .setPadding(10)
+            .setOrigin(0.5, 0)
+
+        let accountValueTextYPos = this.interestText.height + 10;
+        let accountValueTextOrigin = [0.5, -0.5];
+
+        if(this.lockWhileInteresting) {
+            this.termPeriodText = AddNormalText(scene, 0, this.interestText.height + 10, `0 / ${(this.intervalInMilliseconds / 1000).toFixed(0)} of the term period`)
+            .setPadding(10)
+            .setOrigin(0.5, -0.5);
+            accountValueTextYPos = this.termPeriodText.height + 10;
+            accountValueTextOrigin = [0.5, -1.0]
+        }
+
+        this.accountValueText = AddNormalText(scene, 0, accountValueTextYPos, initialAccountValue.toString())
+            .setPadding(10)
+            .setOrigin(accountValueTextOrigin[0], accountValueTextOrigin[1]);
+    }
+
+    createComponentGroup(scene) {
+        this.componentGroup = scene.add.group();
+        this.componentGroup.add(this.labelText);
+        this.componentGroup.add(this.interestText);
+        if(this.lockWhileInteresting) {
+            this.componentGroup.add(this.termPeriodText);
+        }
+        this.componentGroup.add(this.accountValueText);
+    }
+
     createButton(x, y, width, height, text, color) {
-        const button = this.scene.add.rectangle(
-            this.posX + x,
-            this.posY + y,
-            width,
-            height,
-            color
-        ).setInteractive({ useHandCursor: true });
-
-        const buttonText = AddNormalText(
-            this.scene,
-            this.posX + x,
-            this.posY + y,
-            text
-        ).setOrigin(0.5);
-
-        button.on('pointerover', () => {
-            button.setAlpha(0.8);
-        });
-
-        button.on('pointerout', () => {
-            button.setAlpha(1);
-        });
-
-        const buttonGroup = this.scene.add.group();
-        buttonGroup.add(button);
-        buttonGroup.add(buttonText);
-
-        buttonGroup.text = buttonText;
-        buttonGroup.setVisible(false);
-
-        return buttonGroup;
+        return new ButtonComponent().init(this.scene, this.posX + x, this.posY + y, width, height, text, color).hide();
     }
 
     async promptForAmount(action) {
@@ -159,28 +144,18 @@ export class AccountComponent {
 
     addDeposit(callback) {
         this.onDepositCallback = callback;
-        this.depositButton.setVisible(true);
-        this.depositButton.getChildren()[0].on('pointerdown', () => {
-            if (this.onDepositCallback) {
-                this.onDepositCallback(this);
-            }
-        });
+        this.depositButton.show().addCallback(this.onDepositCallback);
         this.container.setHeight(this.containerHeightWithButtons).setOrigin(0.5, 0.4);
-        this.componentGroup.add(this.depositButton);
+        this.componentGroup.add(this.depositButton.getGroup());
 
         return this;
     }
 
     addWithdraw(callback) {
         this.onWithdrawCallback = callback;
-        this.withdrawButton.setVisible(true);
-        this.withdrawButton.getChildren()[0].on('pointerdown', () => {
-            if (this.onWithdrawCallback) {
-                this.onWithdrawCallback(this);
-            }
-        });
+        this.withdrawButton.show().addCallback(this.onWithdrawCallback);
         this.container.setHeight(this.containerHeightWithButtons).setOrigin(0.5, 0.4);
-        this.componentGroup.add(this.withdrawButton);
+        this.componentGroup.add(this.withdrawButton.getGroup());
 
         return this;
     }
@@ -207,43 +182,14 @@ export class AccountComponent {
     }
 
     lock() {
-        this.depositButton.getChildren()[0].setAlpha(0.3);
-        this.depositButton.getChildren()[0].input.enabled = false;
-        this.withdrawButton.getChildren()[0].setAlpha(0.3);
-        this.withdrawButton.getChildren()[0].input.enabled = false;
+        this.depositButton.lock();
+        this.withdrawButton.lock();
         this.locked = true;
     }
 
     unlock() {
-        this.depositButton.getChildren()[0].setAlpha(1);
-        this.depositButton.getChildren()[0].input.enabled = true;
-        this.withdrawButton.getChildren()[0].setAlpha(1);
-        this.withdrawButton.getChildren()[0].input.enabled = true;
+        this.depositButton.unlock();
+        this.withdrawButton.unlock();
         this.locked = false;
-    }
-
-    setPosition(x, y) {
-        // Update stored positions
-        const dx = x - this.posX;
-        const dy = y - this.posY;
-        this.posX = x;
-        this.posY = y;
-
-        // Update container position
-        this.container.setPosition(x, y);
-
-        // Update all elements' positions
-        this.accountValueText.x += dx;
-        this.accountValueText.y += dy;
-
-        // Move button groups
-        for (const button of [this.depositButton, this.withdrawButton]) {
-            button.getChildren().forEach(child => {
-                child.x += dx;
-                child.y += dy;
-            });
-        }
-
-        return this;
     }
 };

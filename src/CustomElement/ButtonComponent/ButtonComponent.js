@@ -6,7 +6,7 @@ export class ButtonComponent {
         this.buttonGroup = null;
     }
 
-    init(scene, x, y, width, height, text) {
+    init(scene, x, y, width, height, text, color = 0x4CAF50 /*Green*/) {
         this.buttonGroup = this.createButton(
             scene,
             x,
@@ -14,19 +14,55 @@ export class ButtonComponent {
             width,
             height,
             text,
-            0x4CAF50 //Green
+            color
         );
-         this.buttonGroup.getChildren()[0].on('pointerdown', () => {
+
+        this.getButton().on('pointerdown', () => {
             for(const callback of this.callbacks) {
                 callback();
             }
         });
+
         return this;
     }
 
     addCallback(callback) {
         this.callbacks.push(callback);
         return this;
+    }
+
+    show() {
+        this.buttonGroup.setVisible(true);
+        this.enable();
+        return this;
+    }
+
+    hide() {
+        this.buttonGroup.setVisible(false);
+        this.disable();
+        return this;
+    }
+
+    disable() {
+        this.getButton().disableInteractive();
+        return this;
+    }
+
+    enable() {
+        this.getButton().setInteractive({ useHandCursor: true });
+        return this;
+    }
+
+    lock() {
+        this.disable();
+        this.getButton().setAlpha(0.3);
+        this.getButton().input.enabled = false;
+    }
+
+    unlock() {
+        this.enable();
+        this.getButton().setAlpha(1);
+        this.getButton().input.enabled = true;
     }
 
     createButton(scene, x, y, width, height, text, color) {
@@ -61,5 +97,33 @@ export class ButtonComponent {
         buttonGroup.setVisible(true);
 
         return buttonGroup;
+    }
+
+    setX(posX) {
+        this.buttonGroup.setX(posX);
+        return this;
+    }
+
+    setY(posY) {
+        this.buttonGroup.setY(posY);
+        return this;
+    }
+
+    setDepth(depth) {
+        this.getButton().setDepth(depth);
+        this.getButtonText().setDepth(depth + 1);
+        return this;
+    }
+
+    getGroup() {
+        return this.buttonGroup;
+    }
+
+    getButton() {
+        return this.buttonGroup.getChildren()[0];
+    }
+
+    getButtonText() {
+        return this.buttonGroup.getChildren()[1];
     }
 }

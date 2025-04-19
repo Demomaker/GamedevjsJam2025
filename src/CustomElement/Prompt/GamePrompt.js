@@ -1,5 +1,6 @@
 import { AddNormalText } from '../../GameProperties/Utils.js';
 import { ForegroundColor, toPhaserColor } from '../../GameProperties/Colors.js';
+import { ButtonComponent } from '../ButtonComponent/ButtonComponent.js';
 
 export class GamePrompt {
     constructor(scene) {
@@ -11,9 +12,7 @@ export class GamePrompt {
         this.messageText = null;
         this.inputField = null;
         this.confirmButton = null;
-        this.confirmButtonText = null;
         this.cancelButton = null;
-        this.cancelButtonText = null;
         this.inputValue = '';
         this.inputBg = null;
         this.isActive = false;
@@ -92,7 +91,7 @@ export class GamePrompt {
         this.inputField.setDepth(1003);
         this.inputField.setVisible(false);
 
-        const { button: confirmButton, buttonText: confirmButtonText } = this.createButton(
+        this.confirmButton = this.createButton(
             width / 2 - 80,
             height / 2 + promptHeight / 2 - 30,
             140,
@@ -100,14 +99,10 @@ export class GamePrompt {
             "Confirm",
             0x4CAF50,
             1002
-        );
-        this.confirmButton = confirmButton;
-        this.confirmButtonText = confirmButtonText;
-        this.confirmButton.visible = false;
-        this.confirmButtonText.visible = false;
+        ).hide();
 
 
-        const { button: cancelButton, buttonText: cancelButtonText } = this.createButton(
+        this.cancelButton = this.createButton(
             width / 2 + 80,
             height / 2 + promptHeight / 2 - 30,
             140,
@@ -115,11 +110,7 @@ export class GamePrompt {
             "Cancel",
             0xF44336,
             1002
-        );
-        this.cancelButton = cancelButton;
-        this.cancelButtonText = cancelButtonText;
-        this.cancelButton.visible = false;
-        this.cancelButtonText.visible = false;
+        ).hide();
 
         this.container = this.scene.add.container(0, 0, [
             this.overlay,
@@ -128,10 +119,10 @@ export class GamePrompt {
             this.messageText,
             this.inputBg,
             this.inputField,
-            this.confirmButton,
-            this.confirmButtonText,
-            this.cancelButton,
-            this.cancelButtonText
+            this.confirmButton.getButton(),
+            this.confirmButton.getButtonText(),
+            this.cancelButton.getButton(),
+            this.cancelButton.getButtonText()
         ]);
 
         this.container.setDepth(1000);
@@ -141,39 +132,15 @@ export class GamePrompt {
     }
 
     createButton(x, y, width, height, text, color, depth) {
-        const button = this.scene.add.rectangle(
-            x,
-            y,
-            width,
-            height,
-            color
-        ).setInteractive({ useHandCursor: true });
-        button.setDepth(depth);
+        const buttonComponent = new ButtonComponent().init(this.scene, x, y, width, height, text, color).setDepth(depth);
 
-        const buttonText = AddNormalText(
-            this.scene,
-            x,
-            y,
-            text
-        ).setOrigin(0.5);
-        buttonText.setDepth(depth + 1);
-
-        button.on('pointerover', () => {
-            button.setAlpha(0.8);
-        });
-
-        button.on('pointerout', () => {
-            button.setAlpha(1);
-        });
-
-        return { button, buttonText };
+        return buttonComponent;
     }
 
     setupKeyboardInput() {
         this.originalKeyboardInput = this.scene.input.keyboard.enabled;
 
         this.scene.input.keyboard.enabled = true;
-        this.scene.input.
 
         const keyboard = this.scene.input.keyboard.addKeys({
             'BACKSPACE': Phaser.Input.Keyboard.KeyCodes.BACKSPACE,
@@ -256,13 +223,11 @@ export class GamePrompt {
         this.messageText.setVisible(true);
         this.inputField.setVisible(true);
 
-        this.confirmButton.setVisible(true);
-        this.confirmButtonText.setVisible(true);
-        this.cancelButton.setVisible(true);
-        this.cancelButtonText.setVisible(true);
+        this.confirmButton.show();
+        this.cancelButton.show();
 
-        this.confirmButton.on('pointerdown', this.confirm.bind(this));
-        this.cancelButton.on('pointerdown', this.cancel.bind(this));
+        this.confirmButton.getButton().on('pointerdown', this.confirm.bind(this));
+        this.cancelButton.getButton().on('pointerdown', this.cancel.bind(this));
 
         this.setupKeyboardInput();
 
@@ -317,16 +282,14 @@ export class GamePrompt {
         this.inputField.setVisible(false);
         this.inputBg.setVisible(false);
 
-        this.confirmButton.setVisible(false);
-        this.confirmButtonText.setVisible(false);
-        if (this.confirmButton.listeners) {
-            this.confirmButton.removeAllListeners('pointerdown');
+        this.confirmButton.hide();
+        if (this.confirmButton.getButton().listeners) {
+            this.confirmButton.getButton().removeAllListeners('pointerdown');
         }
 
-        this.cancelButton.setVisible(false);
-        this.cancelButtonText.setVisible(false);
-        if (this.cancelButton.listeners) {
-            this.cancelButton.removeAllListeners('pointerdown');
+        this.cancelButton.hide();
+        if (this.cancelButton.getButton().listeners) {
+            this.cancelButton.getButton().removeAllListeners('pointerdown');
         }
 
         this.restoreKeyboardInput();
@@ -352,18 +315,14 @@ export class GamePrompt {
 
         this.inputField.setVisible(false);
 
-        this.confirmButton.setVisible(true);
-        this.confirmButtonText.setVisible(true);
-        this.confirmButtonText.setText("OK");
+        this.confirmButton.show();
+        this.confirmButton.getButtonText().setText("OK");
+        this.confirmButton.setX(this.scene.scale.width / 2);
 
-        this.confirmButton.x = this.scene.scale.width / 2;
-        this.confirmButtonText.x = this.scene.scale.width / 2;
-
-        this.cancelButton.setVisible(false);
-        this.cancelButtonText.setVisible(false);
+        this.cancelButton.hide();
 
         this.confirmCallback = callback;
-        this.confirmButton.on('pointerdown', this.confirm.bind(this));
+        this.confirmButton.getButton().on('pointerdown', this.confirm.bind(this));
 
         this.setupKeyboardInput();
 
