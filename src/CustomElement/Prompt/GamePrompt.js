@@ -26,7 +26,6 @@ export class GamePrompt {
     init() {
         const { width, height } = this.scene.scale;
 
-        this.setupKeyboardEventListening();
         this.overlay = this.scene.add.rectangle(
             width / 2,
             height / 2,
@@ -139,47 +138,47 @@ export class GamePrompt {
         return buttonComponent;
     }
 
+    onKeyDown(event) {
+        if (!this.isActive) return;
+
+        if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.BACKSPACE) {
+            this.inputValue = this.inputValue.slice(0, -1);
+            this.inputField.setText(this.inputValue);
+            return;
+        }
+
+        if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
+            this.confirm();
+            return;
+        }
+
+        if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
+            this.cancel();
+            return;
+        }
+
+        if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.ZERO && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.NINE) || event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
+            let char = String.fromCharCode(event.keyCode);
+            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
+                char = '.';
+            }
+
+            if (char === '.' && this.inputValue.includes('.')) {
+                return;
+            }
+            this.inputValue += char;
+            this.inputField.setText(this.inputValue);
+        }
+    }
+
     setupKeyboardInput() {
         this.handleInputReservation(true);
+        this.scene.input.keyboard.on('keydown', this.onKeyDown, this);
     }
 
     restoreKeyboardInput() {
         this.handleInputReservation(false);
-    }
-
-    setupKeyboardEventListening() {
-        this.scene.input.keyboard.on('keydown', (event) => {
-            if (!this.isActive) return;
-
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.BACKSPACE) {
-                this.inputValue = this.inputValue.slice(0, -1);
-                this.inputField.setText(this.inputValue);
-                return;
-            }
-
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-                this.confirm();
-                return;
-            }
-
-            if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC) {
-                this.cancel();
-                return;
-            }
-
-            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.ZERO && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.NINE) || event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
-                let char = String.fromCharCode(event.keyCode);
-                if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
-                    char = '.';
-                }
-
-                if (char === '.' && this.inputValue.includes('.')) {
-                    return;
-                }
-                this.inputValue += char;
-                this.inputField.setText(this.inputValue);
-            }
-        });
+        this.scene.input.keyboard.off('keydown', this.onKeyDown, this);
     }
 
     handleInputReservation(shouldReserve) {
