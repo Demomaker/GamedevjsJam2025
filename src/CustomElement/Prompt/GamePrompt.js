@@ -32,7 +32,7 @@ export class GamePrompt {
             height,
             0x000000,
             0.6
-        );
+        ).setInteractive();
         this.overlay.setDepth(1000);
         this.overlay.setVisible(false);
 
@@ -184,8 +184,12 @@ export class GamePrompt {
                 return;
             }
 
-            if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 190) {
-                const char = String.fromCharCode(event.keyCode);
+            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.ZERO && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.NINE) || event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
+                let char = String.fromCharCode(event.keyCode);
+                if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.PERIOD) {
+                    char = '.';
+                }
+
                 if (char === '.' && this.inputValue.includes('.')) {
                     return;
                 }

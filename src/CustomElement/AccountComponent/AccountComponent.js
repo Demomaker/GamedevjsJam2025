@@ -139,7 +139,7 @@ export class AccountComponent {
 
     async promptForAmount(action) {
         const amount = await this.gamePrompt.show(action, `Enter amount to ${action.toLowerCase()}:`, "0");
-        return amount ? parseInt(amount) : 0;
+        return amount ? parseFloat(amount) : 0;
     }
 
     addDeposit(callback) {
