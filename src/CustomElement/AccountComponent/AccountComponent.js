@@ -4,7 +4,7 @@ import { GamePrompt } from '../Prompt/GamePrompt.js';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent.js';
 
 export class AccountComponent {
-    constructor(label, interest, intervalInMilliseconds, lockWhileInteresting) {
+    constructor(label, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount = true) {
         this.label = label;
         this.interest = interest;
         this.intervalInMilliseconds = intervalInMilliseconds;
@@ -25,6 +25,22 @@ export class AccountComponent {
         this.containerHeightWithButtons = 0;
         this.gamePrompt = null;
         this.locked = false;
+        this.isStableAccount = isStableAccount;
+    }
+
+    resetRenderedComponents() {
+        this.labelText = null;
+        this.interestText = null;
+        this.accountValueText = null;
+        this.termPeriodText = null;
+        this.container = null;
+        this.depositButton = null;
+        this.withdrawButton = null;
+        this.onDepositCallback = null;
+        this.onWithdrawCallback = null;
+        this.componentGroup = null;
+        this.containerHeightWithButtons = 0;
+        this.gamePrompt = null;
     }
 
     init(scene, posX, posY, initialAccountValue, gamePrompt = null) {
@@ -34,6 +50,16 @@ export class AccountComponent {
         this.gamePrompt = gamePrompt || new GamePrompt(scene).init();
 
         this.createSubComponents(scene, posX, posY, initialAccountValue);
+        return this;
+    }
+
+    setScene(scene) {
+        const oldAccountValue = parseFloat(this.accountValueText.text);
+        this.resetRenderedComponents();
+        this.scene = scene;
+        this.gamePrompt = new GamePrompt(scene).init();
+
+        this.createSubComponents(this.scene, this.posX, this.posY, oldAccountValue);
         return this;
     }
 
@@ -103,7 +129,7 @@ export class AccountComponent {
             .setPadding(10)
             .setOrigin(0.5, 0.5);
 
-        this.interestText = AddNormalText(scene, 0, this.labelText.height + 10, `Interest : ${(this.interest * 100).toFixed(2)}% per ${(this.intervalInMilliseconds / 1000).toFixed(0)} seconds`)
+        this.interestText = AddNormalText(scene, 0, this.labelText.height + 10, `${this.isStableAccount ? "Interest" : "Potential"} : ${(this.interest * 100).toFixed(2)}% per ${(this.intervalInMilliseconds / 1000).toFixed(0)} seconds`)
             .setPadding(10)
             .setOrigin(0.5, 0)
 

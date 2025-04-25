@@ -2,12 +2,17 @@ import { Account } from './Account.js';
 import { GamePrompt } from '../../CustomElement/Prompt/GamePrompt.js';
 
 export class OperationableAccount extends Account {
-    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false) { super(accountName, interest, intervalInMilliseconds, lockWhileInteresting); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
+    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, isStableAccount = true) { super(accountName, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
     init(scene, posX, posY, balance) {
-        const parent = super.init(scene, posX, posY, balance);
-        const self = this;
+        super.init(scene, posX, posY, balance);
         this.gamePrompt = new GamePrompt(scene).init();
+        this.setupAccountComponent();
+        return this;
+    }
 
+    setupAccountComponent() {
+        const parent = this;
+        const self = this;
         parent.accountComponent = parent.accountComponent
         .addDeposit(async () => {
             const amount = await parent.accountComponent.deposit();
@@ -48,7 +53,12 @@ export class OperationableAccount extends Account {
                 callback(amount);
             }
         });
+    }
 
+    setScene(scene) {
+        super.setScene(scene);
+        this.gamePrompt = new GamePrompt(scene).init();
+        this.setupAccountComponent();
         return this;
     }
 

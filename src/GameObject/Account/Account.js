@@ -1,9 +1,9 @@
 import { AccountComponent } from '../../CustomElement/AccountComponent/AccountComponent.js';
 
 export class Account {
-    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false) {
+    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, isStableAccount = true) {
         this.accountName = accountName;
-        this.accountComponent = new AccountComponent(accountName, interest, intervalInMilliseconds, lockWhileInteresting);
+        this.accountComponent = new AccountComponent(accountName, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount);
         this.balance = 0;
         this.interest = interest;
         this.intervalInMilliseconds = intervalInMilliseconds;
@@ -16,6 +16,11 @@ export class Account {
     init(scene, posX, posY, balance) {
         this.balance = balance;
         this.accountComponent = this.accountComponent.init(scene, posX, posY, balance);
+        return this;
+    }
+
+    setScene(scene) {
+        this.accountComponent.setScene(scene);
         return this;
     }
 
