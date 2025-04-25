@@ -52,5 +52,21 @@ What I've done since last time :
 
 ![Image](https://github.com/user-attachments/assets/0aa8868a-79a1-4b40-8819-1dd87ee804f1)
 
-### Test commit on new computer
+### Day 3 (2025-04-24) log : 
+
+After a while of not working on the game, I decided to return to it.
+
+- I first made it possible to go between scenes and keep the account information of the checking account, as the game needs to go between scenes.
+
+- With this added, I then proceeded to create a StockMarket scene and debug some problems with scene transitions.
+
+- In order to have Stock-market-like accounts, I created StockAccount, which is a subclass of OperationableAccount and allowing some more real-market flow to an account. The luck factor can be increased or decreased to better or diminish luck.
+
+- I created the stock market accounts in the StockMarketScene and also added buttons to go between the scenes.
+
+- With some help from someone, I created Jerry to tell us what is going on in the market. Jerry is not the brightest bunch right now, but he's useful at least.
+
+- Made Jerry influence the markets
+
+My gif software doesnt seem to work right now. I cant show video, but maybe the web page will be able to show the progress.
 
