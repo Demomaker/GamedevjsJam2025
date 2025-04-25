@@ -38,7 +38,7 @@ export class StockMarketScene extends Phaser.Scene {
         }
 
         if(!StockMarketScene.stableCompanyStockAccount) {
-            StockMarketScene.stableCompanyStockAccount = new StockAccount('StableCo', 0.08, 1000)
+            StockMarketScene.stableCompanyStockAccount = new StockAccount('StableCo', 0.08, 1000, false, 5)
             .init(this, 175, 225, 0)
             .dependsOn(MainAccount.getCheckingAccount());
         } else {
@@ -48,7 +48,7 @@ export class StockMarketScene extends Phaser.Scene {
         }
 
         if(!StockMarketScene.growingStartupStockAccount) {
-            StockMarketScene.growingStartupStockAccount = new StockAccount('CharmingCo', 0.34, 1000)
+            StockMarketScene.growingStartupStockAccount = new StockAccount('CharmingCo', 0.34, 1000, false, 2)
             .init(this, 515, 225, 0)
             .dependsOn(MainAccount.getCheckingAccount());
         } else {

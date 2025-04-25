@@ -1,7 +1,11 @@
 import { OperationableAccount } from './OperationableAccount.js';
 
 export class StockAccount extends OperationableAccount {
-    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, baseLuckFactor = 1) { super(accountName, interest, intervalInMilliseconds, lockWhileInteresting, false); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null; this.luckFactor = baseLuckFactor;}
+    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, baseLuckFactor = 1) {
+        super(accountName, interest, intervalInMilliseconds, lockWhileInteresting, false);
+        this.gamePrompt = null;
+        this.luckFactor = baseLuckFactor;
+    }
     init(scene, posX, posY, balance) {
         super.init(scene, posX, posY, balance);
         return this;

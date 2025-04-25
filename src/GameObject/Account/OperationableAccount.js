@@ -2,12 +2,18 @@ import { Account } from './Account.js';
 import { GamePrompt } from '../../CustomElement/Prompt/GamePrompt.js';
 
 export class OperationableAccount extends Account {
-    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, isStableAccount = true) { super(accountName, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount); this.depositCallbacks = []; this.withdrawCallbacks = []; this.depositConditions = []; this.withdrawConditions = []; this.gamePrompt = null;}
+    constructor(accountName, interest, intervalInMilliseconds, lockWhileInteresting = false, isStableAccount = true) {
+        super(accountName, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount);
+        this.depositCallbacks = [];
+        this.withdrawCallbacks = [];
+        this.depositConditions = [];
+        this.withdrawConditions = [];
+        this.gamePrompt = null;
+    }
+
     init(scene, posX, posY, balance) {
         super.init(scene, posX, posY, balance);
-        this.gamePrompt = new GamePrompt(scene).init();
-        this.setupAccountComponent();
-        return this;
+        return this.setupOrResetAccount(scene);
     }
 
     setupAccountComponent() {
@@ -55,11 +61,19 @@ export class OperationableAccount extends Account {
         });
     }
 
-    setScene(scene) {
-        super.setScene(scene);
+    setupOrResetAccount(scene) {
         this.gamePrompt = new GamePrompt(scene).init();
+        this.depositCallbacks = [];
+        this.withdrawCallbacks = [];
+        this.depositConditions = [];
+        this.withdrawConditions = [];
         this.setupAccountComponent();
         return this;
+    }
+
+    setScene(scene) {
+        super.setScene(scene);
+        return this.setupOrResetAccount(scene);
     }
 
 

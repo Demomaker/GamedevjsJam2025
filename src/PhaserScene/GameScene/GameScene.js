@@ -30,7 +30,7 @@ export class GameScene extends Phaser.Scene {
             MainAccount.getCheckingAccount().setScene(this);
         }
         if(!GameScene.highYieldSavingsAccount) {
-            GameScene.highYieldSavingsAccount = new OperationableAccount('High Yield Savings Account', 0.05, 10000, false, 5)
+            GameScene.highYieldSavingsAccount = new OperationableAccount('High Yield Savings Account', 0.05, 10000, false, true)
             .init(this, 175, 225, 0)
             .dependsOn(MainAccount.getCheckingAccount());
         }
@@ -40,7 +40,7 @@ export class GameScene extends Phaser.Scene {
             .dependsOn(MainAccount.getCheckingAccount());
         }
         if(!GameScene.guaranteedInvestmentsAccount) {
-            GameScene.guaranteedInvestmentsAccount = new OperationableAccount('Guaranteed Investments Account', 0.50, 20000, false, 2)
+            GameScene.guaranteedInvestmentsAccount = new OperationableAccount('Guaranteed Investments Account', 0.50, 20000, true, true)
             .init(this, 515, 225, 0)
             .dependsOn(MainAccount.getCheckingAccount());
         }

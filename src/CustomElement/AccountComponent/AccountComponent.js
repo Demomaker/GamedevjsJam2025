@@ -4,7 +4,7 @@ import { GamePrompt } from '../Prompt/GamePrompt.js';
 import { ButtonComponent } from '../ButtonComponent/ButtonComponent.js';
 
 export class AccountComponent {
-    constructor(label, interest, intervalInMilliseconds, lockWhileInteresting, isStableAccount = true) {
+    constructor(label, interest, intervalInMilliseconds, lockWhileInteresting = false, isStableAccount = true) {
         this.label = label;
         this.interest = interest;
         this.intervalInMilliseconds = intervalInMilliseconds;
@@ -76,7 +76,7 @@ export class AccountComponent {
             buttonY,
             buttonWidth,
             buttonHeight,
-            "Deposit",
+            this.isStableAccount ? "Deposit" : "Buy",
             0x4CAF50 //Green
         )
 
@@ -85,7 +85,7 @@ export class AccountComponent {
             buttonY,
             buttonWidth,
             buttonHeight,
-            "Withdraw",
+            this.isStableAccount ? "Withdraw" : "Sell",
             0xF44336 //Red
         )
 
