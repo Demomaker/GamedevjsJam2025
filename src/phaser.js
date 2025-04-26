@@ -2,6 +2,8 @@ import { PageBackgroundColor, PhaserBackgroundColor } from './GameProperties/Col
 import { MainMenuScene } from './PhaserScene/MainMenuScene/MainMenuScene.js';
 import { GameScene } from './PhaserScene/GameScene/GameScene.js';
 import { StockMarketScene } from './PhaserScene/StockMarketScene/StockMarketScene.js';
+import { ShopScene } from './PhaserScene/ShopScene/ShopScene.js';
+import { AttributionScene } from './PhaserScene/AttributionScene/AttributionScene.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -9,7 +11,7 @@ const config = {
     height: 600,
     parent: 'game-container',
     backgroundColor: PhaserBackgroundColor,
-    scene: [MainMenuScene, GameScene, StockMarketScene]
+    scene: [MainMenuScene, GameScene, StockMarketScene, ShopScene, AttributionScene]
 }
 
 document.body.style = `

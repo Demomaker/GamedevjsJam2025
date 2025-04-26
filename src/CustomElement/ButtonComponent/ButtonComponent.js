@@ -110,6 +110,14 @@ export class ButtonComponent {
         return this;
     }
 
+    getX() {
+        return this.buttonGroup.x;
+    }
+
+    getY() {
+        return this.buttonGroup.y;
+    }
+
     setDepth(depth) {
         this.getButton().setDepth(depth);
         this.getButtonText().setDepth(depth + 1);

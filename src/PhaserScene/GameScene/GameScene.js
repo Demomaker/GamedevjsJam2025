@@ -18,8 +18,11 @@ export class GameScene extends Phaser.Scene {
         this.stockMarketButton = null;
         this.timeAtLastComponentUpdate = new Date().getTime();
     }
-    preload() { /* game assets */ }
+    preload() {
+        this.load.image('background-faded', './assets/money-monk-with-jerry-logo-faded-3.png');
+    }
     create() {
+        this.add.image(400, 300, 'background-faded');
         const self = this;
 
         if(MainAccount.isCheckingAccountNull()) {
@@ -50,12 +53,12 @@ export class GameScene extends Phaser.Scene {
             .dependsOn(MainAccount.getCheckingAccount());
         }
 
-        const buttonWidth = 332;
+        const buttonWidth = 166;
         const buttonHeight = 96;
         this.workButton = new ButtonComponent()
         .init(
             this,
-            516,
+            435,
             64,
             buttonWidth,
             buttonHeight,
@@ -63,6 +66,18 @@ export class GameScene extends Phaser.Scene {
         )
         .addCallback(() => {
             MainAccount.getCheckingAccount().incrementBalanceBy(1);
+        });
+        this.shopButton = new ButtonComponent()
+        .init(
+            this,
+            615,
+            64,
+            buttonWidth,
+            buttonHeight,
+            'Shop'
+        )
+        .addCallback(() => {
+           this.scene.start('ShopScene');
         });
 
         this.stockMarketButton = new ButtonComponent()
@@ -84,7 +99,7 @@ export class GameScene extends Phaser.Scene {
             }
         });
 
-        AddTitleText(this, 400, 400, 'Bank');
+        AddTitleText(this, 675, 535, 'Bank');
     }
 
     update() { /* game loop */

@@ -7,8 +7,8 @@ export class Jerry extends Phaser.GameObjects.Container {
         this.goodAnnouncementCallbacks = [];
 
         this.jerryBody = scene.add.sprite(0, 0, 'jerry-body');
-        this.jerryFace = scene.add.sprite(0, -60, 'jerry-face');
-        this.jerryHair = scene.add.sprite(0, -100, 'jerry-hair');
+        this.jerryFace = scene.add.sprite(0, -140, 'jerry-face');
+        this.jerryHair = scene.add.sprite(0, -210, 'jerry-hair');
 
         this.speechBubble = scene.add.graphics();
         this.speechBubble.fillStyle(0xFFFFFF, 0.7);

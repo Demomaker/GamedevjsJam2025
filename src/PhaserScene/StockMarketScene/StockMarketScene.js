@@ -22,8 +22,10 @@ export class StockMarketScene extends Phaser.Scene {
         this.load.image('jerry-face', 'assets/jerry-face-2.png');
         this.load.image('jerry-hair', 'assets/jerry-hair-2.png');
         this.load.image('particle', 'assets/particle.png');
+        this.load.image('background-faded', './assets/money-monk-with-jerry-logo-faded-3.png');
     }
     create() {
+        this.add.image(400, 300, 'background-faded');
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC && !KeyEventSubscription.isKeyboardReserved()) {
                 this.scene.start('GameScene');
@@ -57,7 +59,7 @@ export class StockMarketScene extends Phaser.Scene {
             .dependsOn(MainAccount.getCheckingAccount());
         }
 
-        this.jerry = new Jerry(this, 200, 500)
+        this.jerry = new Jerry(this, 600, 500)
         .addGoodAnnouncementCallback(() => {
             StockMarketScene.growingStartupStockAccount.increaseLuckFactor();
             StockMarketScene.stableCompanyStockAccount.increaseLuckFactor();
@@ -82,9 +84,7 @@ export class StockMarketScene extends Phaser.Scene {
             this.scene.start('GameScene');
         });
 
-        AddTitleText(this, 400, 400, 'Stock Market');
-
-
+        AddTitleText(this, 50, 535, 'Stock Market');
     }
     update(time, delta) {
         this.jerry.update(time);

@@ -1,0 +1,24 @@
+Music :
+    Tuesday Vibes by Snoozy Beats https://soundcloud.com/snoozybeats
+    Creative Commons — Attribution 3.0 Unported — CC BY 3.0
+    Free Download / Stream: https://www.audiolibrary.com.co/snoozybeats/tuesday-vibes
+    Music promoted by Audio Library https://youtu.be/Gd5msntuOng
+
+Graphics - Created by Demomaker using :
+    Piskel App - https://www.piskelapp.com/
+    Photopea - https://www.photopea.com/
+
+Programming - Done by Demomaker using :
+    Kate text editor (Kubuntu) - https://kate-editor.org/
+
+Technologies used :
+    HTML - HyperText Markup Language
+    Javascript
+    Phaser API - https://phaser.io/
+
+With some help with concepts, ideas, mathematical formulas :
+    JeyDevLab
+    ChatGPT (OpenAi)
+    Claude (Anthropic)
+
+Thank you for playing this game!
