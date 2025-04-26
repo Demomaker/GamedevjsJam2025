@@ -92,3 +92,13 @@ Today I'm going to publish the game probably.
 
 - I hopefully published the game
 
+### Post-Publish : 
+
+The game has been successfully published on itch.io and submitted to the jam!
+
+Link to itch.io : https://demomaker.itch.io/money-monk-with-jerry
+
+Link to submissions page to see other projects : https://itch.io/jam/gamedevjs-2025/entries 
+
+I suggest you checkout this game specifically (by jeydevlab) : https://jeydevlab.itch.io/stacknroll
+
