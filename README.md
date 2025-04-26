@@ -70,3 +70,25 @@ After a while of not working on the game, I decided to return to it.
 
 My gif software doesnt seem to work right now. I cant show video, but maybe the web page will be able to show the progress.
 
+### Day 4 (2025-04-25) log :
+
+Today I'm going to publish the game probably.
+
+- I added a system of shopping so that there is a purpose to playing the game
+
+- I fixed many small bugs while testing out
+
+- I added a way for it to calculate amount owed for a time spent in another scene so that money accumulates in a good way
+
+- I added many assets so that the game feels more alive
+
+- I fixed Jerry
+
+- I added music to the game
+
+- I added an attributions/credits page to the game to credit stuff that I used for the game
+
+- I fixed other bugs that happened because of the new shopping system
+
+- I hopefully published the game
+
