@@ -1,6 +1,7 @@
 import { ButtonComponent } from '../../CustomElement/ButtonComponent/ButtonComponent.js';
 import { ForegroundColor, toPhaserColor } from '../../GameProperties/Colors.js';
 import { AddTitleText } from '../../GameProperties/Utils.js';
+import { KeyEventSubscription } from '../../CustomElement/KeyEvent/KeyEventSubscription.js';
 
 export class AttributionScene extends Phaser.Scene {
     constructor() {

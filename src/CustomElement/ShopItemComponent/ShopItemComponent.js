@@ -20,6 +20,7 @@ export class ShopItemComponent {
         this.locked = false;
         this.gamePrompt = null;
         this.callback = null;
+        this.condition = null;
     }
 
     init(scene, posX, posY, price) {
@@ -38,6 +39,7 @@ export class ShopItemComponent {
         this.buyButton = null;
         this.container = null;
         this.callback = null;
+        this.condition = null;
         this.componentGroup = null;
         this.gamePrompt = new GamePrompt(scene).init();
         return this.createSubComponents(scene);
@@ -119,7 +121,7 @@ export class ShopItemComponent {
     }
 
     isBuyable() {
-        return !MainAccount.isCheckingAccountNull() && MainAccount.getCheckingAccount().canWithdraw(this.price);
+        return !this.condition() && !MainAccount.isCheckingAccountNull() && MainAccount.getCheckingAccount().canWithdraw(this.price);
     }
 
     buy() {
@@ -143,6 +145,14 @@ export class ShopItemComponent {
 
     setCallback(callback) {
         this.callback = callback;
+        return this;
+    }
+
+    setCondition(condition) {
+        this.condition = condition;
+        if(this.condition()) {
+            this.lock();
+        }
         return this;
     }
 

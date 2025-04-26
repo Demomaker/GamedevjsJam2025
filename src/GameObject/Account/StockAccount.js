@@ -19,25 +19,11 @@ export class StockAccount extends OperationableAccount {
         this.luckFactor--;
     }
 
-    updateByInterest() {
-        const currentTime = new Date().getTime();
-
-        this.currentTermPeriodInstanceInMilliseconds = currentTime - this.lastTime;
-        if (this.currentTermPeriodInstanceInMilliseconds >= this.intervalInMilliseconds / 4 && !this.locked && this.lockWhileInteresting) {
-            this.setLocked(true);
-        }
-
-        if (this.currentTermPeriodInstanceInMilliseconds >= this.intervalInMilliseconds) {
-            this.lastTime = currentTime;
-            const fluctuation = this.calculateLuckFluctuation(this.luckFactor);
-            const changeRate = this.interest * fluctuation;
-            const changeAmount = this.balance * changeRate;
-            this.updateBalance(this.balance + changeAmount);
-            if(this.lockWhileInteresting) {
-                this.setLocked(false);
-            }
-        }
-        return this;
+    calculateTimeInducedBalanceChange(balance) {
+        const fluctuation = this.calculateLuckFluctuation(this.luckFactor);
+        const changeRate = this.interest * fluctuation;
+        const changeAmount = this.balance * changeRate;
+        return balance + changeAmount;
     }
 
     calculateLuckFluctuation(luckFactor) {

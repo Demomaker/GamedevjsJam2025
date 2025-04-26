@@ -20,8 +20,19 @@ export class Account {
     }
 
     setScene(scene) {
+        const currentTime = new Date().getTime();
+        const timeSinceLastTime = currentTime - this.lastTime;
+        this.catchUpBalance(timeSinceLastTime);
         this.accountComponent.setScene(scene);
         return this;
+    }
+
+    catchUpBalance(timeSinceLastTime) {
+        let newAmount = this.balance;
+        for(let i = 1; i < timeSinceLastTime / this.intervalInMilliseconds; i++) {
+            newAmount = this.calculateTimeInducedBalanceChange(newAmount);
+        }
+        this.updateBalance(newAmount);
     }
 
     incrementBalanceBy(difference) {
@@ -45,6 +56,10 @@ export class Account {
         return this;
     }
 
+    calculateTimeInducedBalanceChange(balance) {
+        return balance * (1 + this.interest);
+    }
+
     updateByInterest() {
         const currentTime = new Date().getTime();
 
@@ -55,7 +70,7 @@ export class Account {
 
         if (this.currentTermPeriodInstanceInMilliseconds >= this.intervalInMilliseconds) {
             this.lastTime = currentTime;
-            this.updateBalance(this.balance * (1 + this.interest));
+            this.updateBalance(this.calculateTimeInducedBalanceChange(this.balance));
             if(this.lockWhileInteresting) {
                 this.setLocked(false);
             }

@@ -54,12 +54,18 @@ export class ShopScene extends Phaser.Scene {
             .init(this, 200, 300, 200)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyConsole();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtConsole;
             });
         } else {
             ShopScene.gameConsoleShopItem = ShopScene.gameConsoleShopItem
             .setScene(this)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyConsole();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtConsole;
             });
         }
 
@@ -68,12 +74,18 @@ export class ShopScene extends Phaser.Scene {
             .init(this, 500, 300, 200000)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyCar();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtCar;
             });
         } else {
             ShopScene.carShopItem = ShopScene.carShopItem
             .setScene(this)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyCar();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtCar;
             });
         }
 
@@ -82,12 +94,18 @@ export class ShopScene extends Phaser.Scene {
             .init(this, 200, 500, 500000)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyHouse();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtHouse;
             });
         } else {
             ShopScene.houseShopItem = ShopScene.houseShopItem
             .setScene(this)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyHouse();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtHouse;
             });
         }
 
@@ -96,12 +114,18 @@ export class ShopScene extends Phaser.Scene {
             .init(this, 500, 500, 5000000)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyGuitar();
+            })
+            .setCondition(() => {
+                return MainAccount.getGameProgress().hasBoughtGuitar;
             });
         } else {
             ShopScene.guitarShopItem = ShopScene.guitarShopItem
             .setScene(this)
             .setCallback(() => {
                 MainAccount.getGameProgress().buyGuitar();
+            })
+            .setCondition(() =>  {
+                return MainAccount.getGameProgress().hasBoughtGuitar;
             });
         }
 

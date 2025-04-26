@@ -93,6 +93,19 @@ export class GameScene extends Phaser.Scene {
             this.scene.start('StockMarketScene');
         })
 
+        this.mainMenuButton = new ButtonComponent()
+        .init(
+            this,
+            510,
+            425,
+            buttonWidth,
+            buttonHeight,
+            'Main Menu'
+        )
+        .addCallback(() => {
+            this.scene.start('MainMenuScene');
+        })
+
         this.input.keyboard.on('keydown', (event) => {
             if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ESC && !KeyEventSubscription.isKeyboardReserved()) {
                 this.scene.start('MainMenuScene');

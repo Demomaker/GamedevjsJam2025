@@ -16,10 +16,19 @@ export class MainMenuScene extends Phaser.Scene {
 
         if(Music.isNull()) {
             const music = this.sound.add('musicaudio');
-            music.setLoop(true);
-            music.play();
             Music.setMusic(music);
+            Music.play();
         }
+
+        const musicMuteUnmuteButton = new ButtonComponent()
+        .init(this, 400, 100, 400, 100, 'MUTE / UNMUTE', toPhaserColor(ForegroundColor), AddTitleText)
+        .addCallback(() => {
+            if(Music.isItPlaying()) {
+                Music.pause();
+            } else {
+                Music.play();
+            }
+        })
 
         const playButton = new ButtonComponent()
         .init(this, 400, 300, 400, 300, 'PLAY', toPhaserColor(ForegroundColor), AddTitleText)
@@ -28,7 +37,7 @@ export class MainMenuScene extends Phaser.Scene {
         });
 
         const creditsButton = new ButtonComponent()
-        .init(this, 400, 450, 400, 100, 'CREDITS', toPhaserColor(ForegroundColor), AddTitleText)
+        .init(this, 400, 500, 400, 100, 'CREDITS', toPhaserColor(ForegroundColor), AddTitleText)
         .addCallback(() => {
             this.scene.start('AttributionScene');
         });
